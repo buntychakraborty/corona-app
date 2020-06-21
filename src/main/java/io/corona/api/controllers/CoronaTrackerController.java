@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import io.corona.api.CoronaService;
 import io.corona.api.model.Covid19B0;
 import io.corona.api.rest.clients.CoronaRestClient;
 import io.corona.api.rest.clients.IndiaCovidRestClient;
+import io.corona.api.services.CoronaService;
 
 @RestController
 @RequestMapping("/corona-api")
@@ -35,7 +35,7 @@ public class CoronaTrackerController {
 	public ModelAndView getAllCases() {
 		ModelAndView modelAndVeiewForIndex= new ModelAndView("index");
 		List<Covid19B0> allCases = client.getWorldCases();
-		
+		logger.info("-----");
 		modelAndVeiewForIndex.addObject("totalCases",coronaService.getTotalNumberCases(allCases));
 		modelAndVeiewForIndex.addObject("totalRecovery",coronaService.getTotalNumberOfRecoveredCases(allCases));
 		modelAndVeiewForIndex.addObject("totalDeaths",coronaService.getTotalNumberOfDeaths(allCases));

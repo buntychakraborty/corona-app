@@ -1,4 +1,4 @@
-package io.corona.api;
+package io.corona.api.services;
 
 import java.util.ArrayList;
 import java.util.List;
