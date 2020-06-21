@@ -1,12 +1,15 @@
 package io.corona.api.controllers;
 
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.corona.api.constants.StringConstant;
 import io.corona.api.model.Covid19B0;
+import io.corona.api.model.Statewise;
 import io.corona.api.rest.clients.CoronaRestClient;
 import io.corona.api.rest.clients.IndiaCovidRestClient;
 import io.corona.api.services.CoronaService;
@@ -84,5 +88,21 @@ public class CoronaTrackerController {
 				indiaRestClient.getIndianCases().getData().getStatewise());
 		return modelAndVeiewForIndia;
 	}
-
+	
+	@GetMapping("/graphs/india/displayBarGraph")
+	public ModelAndView barGraph(Model model) {
+		ModelAndView modelAndVeiewForCountryGraphs = new ModelAndView("barGraph");
+		Map<String, Integer> surveyMap = new LinkedHashMap<>();
+		surveyMap=indiaRestClient.getIndianCases().getData().getStatewise().stream().collect(Collectors.toMap(Statewise::getState, Statewise::getActive));
+		modelAndVeiewForCountryGraphs.addObject("surveyMap", surveyMap);
+		return modelAndVeiewForCountryGraphs;
+	}
+	@GetMapping("/graphs/india/pieChart")
+	public ModelAndView pieChart(Model model) {
+		ModelAndView modelAndVeiewForCountryGraphs = new ModelAndView("pieChart");
+		Map<String, Integer> surveyMap = new LinkedHashMap<>();
+		surveyMap=indiaRestClient.getIndianCases().getData().getStatewise().stream().collect(Collectors.toMap(Statewise::getState, Statewise::getActive));
+		modelAndVeiewForCountryGraphs.addObject("surveyMap", surveyMap);
+		return modelAndVeiewForCountryGraphs;
+	}
 }

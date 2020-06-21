@@ -28,7 +28,7 @@ setTimeout("window.open(self.location, '_self');", 300000);
 <div class="container">
   <h2>COVID-19 Statistics</h2>
   <p>Table showing the world wide cases of Covid-19 Country wise</p>       
-  <label for="cars">Choose your choice:</label>
+  <label for="sel">Choose your choice:</label>
 
 <select name="sample" onchange="location = this.value;" class="browser-default custom-select">
  <option value="#">All</option>
@@ -36,7 +36,16 @@ setTimeout("window.open(self.location, '_self');", 300000);
  <option value="/corona-api/countries/usa">USA</option>
  <option value="/corona-api/countries/china">China</option>
  
-</select>     
+</select>   
+  <label for="graph">Choose your Graph:</label>
+
+<select name="sample" onchange="location = this.value;" class="browser-default custom-select">
+ <option value="#">All</option>
+ <option value="/corona-api/graphs/india/displayBarGraph">Bar Graph For India</option>
+ <option value="/corona-api/graphs/india/pieChart">Pie Chart For India</option>
+ <option value="/corona-api/countries/china">China</option>
+ 
+</select> 
   <table class="content-table">
     <thead>
       <tr>
@@ -52,8 +61,8 @@ setTimeout("window.open(self.location, '_self');", 300000);
     </thead>
     <tbody>
       <tr th:each="coronaCase: ${allCases}">
-        <td  th:text="${coronaCase.getCountry()}"  style="cursor: pointer" onclick="'callForCounry(\'' + ${coronaCase.country} + '\');'"
-        ></td>
+        <td  th:text="${coronaCase.getCountry()}"  style="cursor: pointer" 
+        ><a th:hreaf="@{/countries/usa}"></a></td>
         <td th:text="${coronaCase.getCases()}"></td>
         <td th:text="${coronaCase.getRecovered()}"></td>
         <td th:text="${coronaCase.getDeaths()}"></td>
