@@ -1,6 +1,8 @@
 package io.corona.api.controllers;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +48,7 @@ public class CoronaTrackerController {
 		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_TODAYS_RECOVERY,coronaService.getTotalNumberOfTodaysRecovery(allCases));
 		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_TODAYS_DEATH,coronaService.getTotalNumberOfTodaysDeath(allCases));
 		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_POPULATION,coronaService.getTotalNumberOfPopulation(allCases));
-		modelAndVeiewForIndex.addObject(StringConstant.ALL_CASES,allCases);
+		modelAndVeiewForIndex.addObject(StringConstant.ALL_CASES,allCases.stream().sorted(Comparator.comparing(Covid19B0::getCases).reversed()).collect(Collectors.toList()));
 		
 		return modelAndVeiewForIndex;
 	}
