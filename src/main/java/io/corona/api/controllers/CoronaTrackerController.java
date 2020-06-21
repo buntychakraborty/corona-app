@@ -1,6 +1,5 @@
 package io.corona.api.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import io.corona.api.CoronaService;
 import io.corona.api.model.Covid19B0;
-import io.corona.api.model.IndiaCoivid19;
 import io.corona.api.rest.clients.CoronaRestClient;
 import io.corona.api.rest.clients.IndiaCovidRestClient;
 
