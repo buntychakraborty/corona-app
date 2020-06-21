@@ -85,7 +85,7 @@ public class CoronaTrackerController {
 	public ModelAndView getIndianCases() {
 		ModelAndView modelAndVeiewForIndia = new ModelAndView(StringConstant.INDIAN_STATE_WISE);
 		modelAndVeiewForIndia.addObject(StringConstant.INDIAN_STATES,
-				indiaRestClient.getIndianCases().getData().getStatewise());
+				indiaRestClient.getIndianCases().getData().getStatewise().stream().sorted(Comparator.comparing(Statewise::getConfirmed).reversed()).collect(Collectors.toList()));
 		return modelAndVeiewForIndia;
 	}
 	
