@@ -27,7 +27,16 @@ setTimeout("window.open(self.location, '_self');", 300000);
 
 <div class="container">
   <h2>COVID-19 Statistics</h2>
-  <p>Table showing the world wide cases of Covid-19 Country wise</p>            
+  <p>Table showing the world wide cases of Covid-19 Country wise</p>       
+  <label for="cars">Choose your choice:</label>
+
+<select name="sample" onchange="location = this.value;" class="browser-default custom-select">
+ <option value="#">All</option>
+ <option value="/corona-api/countries/india/statewise">India</option>
+ <option value="/corona-api/countries/usa">USA</option>
+ <option value="/corona-api/countries/china">China</option>
+ 
+</select>     
   <table class="content-table">
     <thead>
       <tr>
