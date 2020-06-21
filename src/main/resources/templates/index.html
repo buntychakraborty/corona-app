@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://www.thymeleaf.org/">
+<head>
+  <title>COVID-19 Statistics</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+   <link rel="stylesheet" href="/table.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+  function callForCounry(url){
+	  window.location = "countries/"+url;
+
+  }
+  
+  
+  </script>
+  <script type="text/javascript">
+function load()
+{
+setTimeout("window.open(self.location, '_self');", 300000);
+}
+</script>
+</head>
+<body onload="load()">
+
+<div class="container">
+  <h2>COVID-19 Statistics</h2>
+  <p>Table showing the world wide cases of Covid-19 Country wise</p>            
+  <table class="content-table">
+    <thead>
+      <tr>
+        <th>Country Name</th>
+        <th>Total Cases</th>
+        <th>Recovered</th>
+         <th>Deaths</th>
+        <th>Today's Cases</th>
+        <th>Today's Recovery</th>
+        <th>Today's Death</th>
+        <th>Total Population</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="coronaCase: ${allCases}">
+        <td  th:text="${coronaCase.getCountry()}"  style="cursor: pointer" onclick="'callForCounry(\'' + ${coronaCase.country} + '\');'"
+        ></td>
+        <td th:text="${coronaCase.getCases()}"></td>
+        <td th:text="${coronaCase.getRecovered()}"></td>
+        <td th:text="${coronaCase.getDeaths()}"></td>
+        <td th:text="${coronaCase.getTodayCases()}"></td>
+         <td th:text="${coronaCase.getTodayRecovered()}"></td>
+          <td th:text="${coronaCase.getTodayDeaths()}"></td>
+           <td th:text="${coronaCase.population}"></td>
+        
+      </tr>
+      <tr>
+      <td >Total</td>
+       <td th:text="${totalCases}"></td>
+        <td th:text="${totalRecovery}"></td>
+        <td th:text="${totalDeaths}"></td>
+       <td th:text="${totalTodays}"></td>
+          <td th:text="${totalTodaysRecovery}"></td>
+           <td th:text="${totalTodaysDeath}"></td>
+            <td th:text="${totalPopulation}"></td>
+      
+      </tr>
+      
+    </tbody>
+  </table>
+</div>
+
+</body>
+
+
+</html>
