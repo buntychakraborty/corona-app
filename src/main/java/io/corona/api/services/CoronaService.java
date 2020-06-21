@@ -10,12 +10,22 @@ import io.corona.api.model.Covid19B0;
 @Service
 public class CoronaService {
 
+	/**
+	 * 
+	 * @param listOfCallCountries
+	 * @return Total Number of cases
+	 */
 	public Integer getTotalNumberCases(List<Covid19B0> listOfCallCountries) {
 		List<Integer> listOfTotalCases = new ArrayList<>();
 		listOfCallCountries.stream().forEach(cases -> listOfTotalCases.add(cases.getCases()));
 		return listOfTotalCases.stream().reduce(Integer::sum).get();
 	}
 
+	/**
+	 * 
+	 * @param listOfCallCountries
+	 * @return Total number of recovered Cases
+	 */
 	public Integer getTotalNumberOfRecoveredCases(List<Covid19B0> listOfCallCountries) {
 		List<Integer> listOfTotalCasesRecovered = new ArrayList<>();
 		listOfCallCountries.stream().forEach(cases -> listOfTotalCasesRecovered.add(cases.getRecovered()));

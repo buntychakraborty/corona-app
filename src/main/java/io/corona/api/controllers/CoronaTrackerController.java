@@ -23,13 +23,11 @@ import io.corona.api.services.CoronaService;
 @RequestMapping(StringConstant.CORONA_API)
 public class CoronaTrackerController {
 
-	
+	private static final Logger logger = LoggerFactory.getLogger(CoronaTrackerController.class);
 
-	private static final Logger logger=LoggerFactory.getLogger(CoronaTrackerController.class);
-	
 	@Autowired
 	private CoronaService coronaService;
-	
+
 	@Autowired
 	private CoronaRestClient client;
 
@@ -38,46 +36,53 @@ public class CoronaTrackerController {
 
 	@GetMapping(StringConstant.COUNTRIES)
 	public ModelAndView getAllCases() {
-		ModelAndView modelAndVeiewForIndex= new ModelAndView(StringConstant.INDEX);
+		ModelAndView modelAndVeiewForIndex = new ModelAndView(StringConstant.INDEX);
 		List<Covid19B0> allCases = client.getWorldCases();
 		logger.info("-----");
-		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_CASES,coronaService.getTotalNumberCases(allCases));
-		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_RECOVERY,coronaService.getTotalNumberOfRecoveredCases(allCases));
-		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_DEATHS,coronaService.getTotalNumberOfDeaths(allCases));
-		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_TODAYS,coronaService.getTotalNumberOfTodaysCase(allCases));
-		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_TODAYS_RECOVERY,coronaService.getTotalNumberOfTodaysRecovery(allCases));
-		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_TODAYS_DEATH,coronaService.getTotalNumberOfTodaysDeath(allCases));
-		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_POPULATION,coronaService.getTotalNumberOfPopulation(allCases));
-		modelAndVeiewForIndex.addObject(StringConstant.ALL_CASES,allCases.stream().sorted(Comparator.comparing(Covid19B0::getCases).reversed()).collect(Collectors.toList()));
-		
+		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_CASES, coronaService.getTotalNumberCases(allCases));
+		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_RECOVERY,
+				coronaService.getTotalNumberOfRecoveredCases(allCases));
+		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_DEATHS, coronaService.getTotalNumberOfDeaths(allCases));
+		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_TODAYS,
+				coronaService.getTotalNumberOfTodaysCase(allCases));
+		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_TODAYS_RECOVERY,
+				coronaService.getTotalNumberOfTodaysRecovery(allCases));
+		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_TODAYS_DEATH,
+				coronaService.getTotalNumberOfTodaysDeath(allCases));
+		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_POPULATION,
+				coronaService.getTotalNumberOfPopulation(allCases));
+		modelAndVeiewForIndex.addObject(StringConstant.ALL_CASES, allCases.stream()
+				.sorted(Comparator.comparing(Covid19B0::getCases).reversed()).collect(Collectors.toList()));
 		return modelAndVeiewForIndex;
 	}
 
 	@GetMapping(StringConstant.COUNTRIES_COUNTRY)
 	public ModelAndView getCountryWise(@PathVariable String country) {
-		ModelAndView modelAndVeiewForCountry= new ModelAndView(StringConstant.COUNTRY_WISE);
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_CASES,client.getCountryWiseCases(country).getCases());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_RECOVERY,client.getCountryWiseCases(country).getRecovered());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_DEATHS,client.getCountryWiseCases(country).getDeaths());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS,client.getCountryWiseCases(country).getTodayCases());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS_RECOVERY,client.getCountryWiseCases(country).getTodayRecovered());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS_DEATH,client.getCountryWiseCases(country).getTodayDeaths());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_POPULATION,client.getCountryWiseCases(country).getPopulation());
-		modelAndVeiewForCountry.addObject(StringConstant.COUNTRY_DTO,client.getCountryWiseCases(country));
-		modelAndVeiewForCountry.addObject(StringConstant.COUNTRY_NAME,client.getCountryWiseCases(country).getCountry());
+		ModelAndView modelAndVeiewForCountry = new ModelAndView(StringConstant.COUNTRY_WISE);
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_CASES, client.getCountryWiseCases(country).getCases());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_RECOVERY,
+				client.getCountryWiseCases(country).getRecovered());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_DEATHS, client.getCountryWiseCases(country).getDeaths());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS,
+				client.getCountryWiseCases(country).getTodayCases());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS_RECOVERY,
+				client.getCountryWiseCases(country).getTodayRecovered());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS_DEATH,
+				client.getCountryWiseCases(country).getTodayDeaths());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_POPULATION,
+				client.getCountryWiseCases(country).getPopulation());
+		modelAndVeiewForCountry.addObject(StringConstant.COUNTRY_DTO, client.getCountryWiseCases(country));
+		modelAndVeiewForCountry.addObject(StringConstant.COUNTRY_NAME,
+				client.getCountryWiseCases(country).getCountry());
 		return modelAndVeiewForCountry;
 	}
 
 	@GetMapping(StringConstant.COUNTRIES_INDIA_STATEWISE)
 	public ModelAndView getIndianCases() {
-		ModelAndView modelAndVeiewForIndia= new ModelAndView(StringConstant.INDIAN_STATE_WISE);
-		modelAndVeiewForIndia.addObject(StringConstant.INDIAN_STATES,indiaRestClient.getIndianCases().getData().getStatewise());
-		
-		//indiaRestClient.getIndianCases().getData().getStatewise().forEach(s->System.out.println(s));
-		
+		ModelAndView modelAndVeiewForIndia = new ModelAndView(StringConstant.INDIAN_STATE_WISE);
+		modelAndVeiewForIndia.addObject(StringConstant.INDIAN_STATES,
+				indiaRestClient.getIndianCases().getData().getStatewise());
 		return modelAndVeiewForIndia;
 	}
-	
-	
 
 }
