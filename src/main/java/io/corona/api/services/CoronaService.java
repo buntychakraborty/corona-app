@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import io.corona.api.constants.StringConstant;
 import io.corona.api.model.Covid19B0;
 import io.corona.api.model.Statewise;
 import io.corona.api.rest.clients.CoronaRestClient;
@@ -22,9 +21,9 @@ import io.corona.api.rest.clients.IndiaCovidRestClient;
 @EnableAsync
 public class CoronaService {
 	
+	
 	@Autowired
 	public CoronaRestClient client;
-
 	@Autowired
 	public IndiaCovidRestClient indiaRestClient;
 	public static List<Covid19B0> allCases = null;
@@ -32,15 +31,14 @@ public class CoronaService {
 	public static Covid19B0 countryWise = null;
 	public static String countryName = null;
 
+	
 	@PostConstruct
 	@Async
-	@Scheduled(cron = "1 * * * * *")
+	@Scheduled(cron = StringConstant._1)
 	public void statfetchWorldCases() {
-//		logger.info("----init---");
 		allCases = client.getWorldCases();
 		allIndianCases = indiaRestClient.getIndianCases().getData().getStatewise().stream()
 				.sorted(Comparator.comparing(Statewise::getConfirmed).reversed()).collect(Collectors.toList());
-
 	}
 	/**
 	 * 

@@ -24,4 +24,5 @@ public class StringConstant {
 	public static final String PIE_CHART = "pieChart";
 	public static final String GRAPHS_INDIA_PIE_CHART = "/graphs/india/pieChart";
 	public static final String GRAPHS_INDIA_DISPLAY_BAR_GRAPH = "/graphs/india/displayBarGraph";
+	public static final String _1 = "1 * * * * *";
 }

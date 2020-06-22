@@ -16,5 +16,4 @@ public class CoronaApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CoronaApiApplication.class, args);
 	}
-
 }

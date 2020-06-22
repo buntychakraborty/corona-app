@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
 import io.corona.api.constants.StringConstant;
 import io.corona.api.model.Covid19B0;
 import io.corona.api.model.Statewise;
@@ -37,10 +36,12 @@ public class CoronaTrackerController {
 	public ModelAndView getAllCases() {
 		ModelAndView modelAndVeiewForIndex = new ModelAndView(StringConstant.INDEX);
 		logger.info("-----");
-		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_CASES, coronaService.getTotalNumberCases(CoronaService.allCases));
+		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_CASES,
+				coronaService.getTotalNumberCases(CoronaService.allCases));
 		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_RECOVERY,
 				coronaService.getTotalNumberOfRecoveredCases(CoronaService.allCases));
-		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_DEATHS, coronaService.getTotalNumberOfDeaths(CoronaService.allCases));
+		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_DEATHS,
+				coronaService.getTotalNumberOfDeaths(CoronaService.allCases));
 		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_TODAYS,
 				coronaService.getTotalNumberOfTodaysCase(CoronaService.allCases));
 		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_TODAYS_RECOVERY,
@@ -57,14 +58,15 @@ public class CoronaTrackerController {
 	@GetMapping(StringConstant.COUNTRIES_COUNTRY)
 	public ModelAndView getCountryWise(@PathVariable String country) {
 		CoronaService.getCountryWiseCases(country);
-		
 		ModelAndView modelAndVeiewForCountry = new ModelAndView(StringConstant.COUNTRY_WISE);
 		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_CASES, CoronaService.countryWise.getCases());
 		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_RECOVERY, CoronaService.countryWise.getRecovered());
 		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_DEATHS, CoronaService.countryWise.getDeaths());
 		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS, CoronaService.countryWise.getTodayCases());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS_RECOVERY, CoronaService.countryWise.getTodayRecovered());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS_DEATH, CoronaService.countryWise.getTodayDeaths());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS_RECOVERY,
+				CoronaService.countryWise.getTodayRecovered());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS_DEATH,
+				CoronaService.countryWise.getTodayDeaths());
 		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_POPULATION, CoronaService.countryWise.getPopulation());
 		modelAndVeiewForCountry.addObject(StringConstant.COUNTRY_DTO, CoronaService.countryWise);
 		modelAndVeiewForCountry.addObject(StringConstant.COUNTRY_NAME, CoronaService.countryWise.getCountry());
@@ -97,7 +99,4 @@ public class CoronaTrackerController {
 		modelAndVeiewForCountryGraphs.addObject(StringConstant.SURVEY_MAP, surveyMap);
 		return modelAndVeiewForCountryGraphs;
 	}
-
-	
-
 }
