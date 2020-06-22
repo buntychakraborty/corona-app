@@ -19,4 +19,9 @@ public class StringConstant {
 	public static final String INDEX = "index";
 	public static final String CORONA_API = "/corona-api";
 	public static final String COUNTRY_WISE = "countryWise";
+	public static final String SURVEY_MAP = "surveyMap";
+	public static final String BAR_GRAPH = "barGraph";
+	public static final String PIE_CHART = "pieChart";
+	public static final String GRAPHS_INDIA_PIE_CHART = "/graphs/india/pieChart";
+	public static final String GRAPHS_INDIA_DISPLAY_BAR_GRAPH = "/graphs/india/displayBarGraph";
 }

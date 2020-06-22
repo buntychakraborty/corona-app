@@ -1,15 +1,47 @@
 package io.corona.api.services;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import io.corona.api.model.Covid19B0;
+import io.corona.api.model.Statewise;
+import io.corona.api.rest.clients.CoronaRestClient;
+import io.corona.api.rest.clients.IndiaCovidRestClient;
 
 @Service
+@EnableAsync
 public class CoronaService {
+	
+	@Autowired
+	public CoronaRestClient client;
 
+	@Autowired
+	public IndiaCovidRestClient indiaRestClient;
+	public static List<Covid19B0> allCases = null;
+	public static List<Statewise> allIndianCases = null;
+	public static Covid19B0 countryWise = null;
+	public static String countryName = null;
+
+	@PostConstruct
+	@Async
+	@Scheduled(cron = "1 * * * * *")
+	public void statfetchWorldCases() {
+//		logger.info("----init---");
+		allCases = client.getWorldCases();
+		allIndianCases = indiaRestClient.getIndianCases().getData().getStatewise().stream()
+				.sorted(Comparator.comparing(Statewise::getConfirmed).reversed()).collect(Collectors.toList());
+
+	}
 	/**
 	 * 
 	 * @param listOfCallCountries
@@ -60,5 +92,12 @@ public class CoronaService {
 		List<Long> listOfPopulation = new ArrayList<>();
 		listOfCallCountries.stream().forEach(cases -> listOfPopulation.add(cases.getPopulation()));
 		return listOfPopulation.stream().reduce(Long::sum).get();
+	}
+	
+	public static void getCountryWiseCases(String name) {
+		allCases.stream().parallel().filter(s -> s.getCountry().equalsIgnoreCase(name)).forEach(cases -> {
+			countryWise = cases;
+			System.out.println(countryWise);
+		});
 	}
 }
