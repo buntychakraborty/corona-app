@@ -6,9 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +29,7 @@ import io.corona.api.rest.clients.IndiaCovidRestClient;
 import io.corona.api.services.CoronaService;
 
 @RestController
+@EnableAsync
 @RequestMapping(StringConstant.CORONA_API)
 public class CoronaTrackerController {
 
@@ -39,11 +45,26 @@ public class CoronaTrackerController {
 
 	@Autowired
 	private IndiaCovidRestClient indiaRestClient;
+	private static List<Covid19B0> allCases = null;
+	private static List<Statewise> allIndianCases = null;
+	private static Covid19B0 countryWise = null;
+	private static String countryName = null;
+
+	@PostConstruct
+	@Async
+	@Scheduled(cron = "1 * * * * *")
+	public void statfetchWorldCases() {
+		logger.info("----init---");
+		allCases = client.getWorldCases();
+		allIndianCases = indiaRestClient.getIndianCases().getData().getStatewise().stream()
+				.sorted(Comparator.comparing(Statewise::getConfirmed).reversed()).collect(Collectors.toList());
+
+	}
 
 	@GetMapping(StringConstant.COUNTRIES)
 	public ModelAndView getAllCases() {
 		ModelAndView modelAndVeiewForIndex = new ModelAndView(StringConstant.INDEX);
-		List<Covid19B0> allCases = client.getWorldCases();
+		// List<Covid19B0> allCases = client.getWorldCases();
 		logger.info("-----");
 		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_CASES, coronaService.getTotalNumberCases(allCases));
 		modelAndVeiewForIndex.addObject(StringConstant.TOTAL_RECOVERY,
@@ -64,47 +85,53 @@ public class CoronaTrackerController {
 
 	@GetMapping(StringConstant.COUNTRIES_COUNTRY)
 	public ModelAndView getCountryWise(@PathVariable String country) {
+		getCountryWiseCases(country);
+		logger.info(countryName);
 		ModelAndView modelAndVeiewForCountry = new ModelAndView(StringConstant.COUNTRY_WISE);
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_CASES, client.getCountryWiseCases(country).getCases());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_RECOVERY,
-				client.getCountryWiseCases(country).getRecovered());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_DEATHS, client.getCountryWiseCases(country).getDeaths());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS,
-				client.getCountryWiseCases(country).getTodayCases());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS_RECOVERY,
-				client.getCountryWiseCases(country).getTodayRecovered());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS_DEATH,
-				client.getCountryWiseCases(country).getTodayDeaths());
-		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_POPULATION,
-				client.getCountryWiseCases(country).getPopulation());
-		modelAndVeiewForCountry.addObject(StringConstant.COUNTRY_DTO, client.getCountryWiseCases(country));
-		modelAndVeiewForCountry.addObject(StringConstant.COUNTRY_NAME,
-				client.getCountryWiseCases(country).getCountry());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_CASES, countryWise.getCases());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_RECOVERY, countryWise.getRecovered());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_DEATHS, countryWise.getDeaths());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS, countryWise.getTodayCases());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS_RECOVERY, countryWise.getTodayRecovered());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_TODAYS_DEATH, countryWise.getTodayDeaths());
+		modelAndVeiewForCountry.addObject(StringConstant.TOTAL_POPULATION, countryWise.getPopulation());
+		modelAndVeiewForCountry.addObject(StringConstant.COUNTRY_DTO, countryWise);
+		modelAndVeiewForCountry.addObject(StringConstant.COUNTRY_NAME, countryWise.getCountry());
 		return modelAndVeiewForCountry;
 	}
 
 	@GetMapping(StringConstant.COUNTRIES_INDIA_STATEWISE)
 	public ModelAndView getIndianCases() {
 		ModelAndView modelAndVeiewForIndia = new ModelAndView(StringConstant.INDIAN_STATE_WISE);
-		modelAndVeiewForIndia.addObject(StringConstant.INDIAN_STATES,
-				indiaRestClient.getIndianCases().getData().getStatewise().stream().sorted(Comparator.comparing(Statewise::getConfirmed).reversed()).collect(Collectors.toList()));
+		modelAndVeiewForIndia.addObject(StringConstant.INDIAN_STATES, allIndianCases);
 		return modelAndVeiewForIndia;
 	}
-	
+
 	@GetMapping(GRAPHS_INDIA_DISPLAY_BAR_GRAPH)
 	public ModelAndView barGraph(Model model) {
 		ModelAndView modelAndVeiewForCountryGraphs = new ModelAndView("barGraph");
 		Map<String, Integer> surveyMap = new LinkedHashMap<>();
-		surveyMap=indiaRestClient.getIndianCases().getData().getStatewise().stream().collect(Collectors.toMap(Statewise::getState, Statewise::getActive));
+		surveyMap = indiaRestClient.getIndianCases().getData().getStatewise().stream()
+				.collect(Collectors.toMap(Statewise::getState, Statewise::getActive));
 		modelAndVeiewForCountryGraphs.addObject("surveyMap", surveyMap);
 		return modelAndVeiewForCountryGraphs;
 	}
+
 	@GetMapping("/graphs/india/pieChart")
 	public ModelAndView pieChart(Model model) {
 		ModelAndView modelAndVeiewForCountryGraphs = new ModelAndView("pieChart");
 		Map<String, Integer> surveyMap = new LinkedHashMap<>();
-		surveyMap=indiaRestClient.getIndianCases().getData().getStatewise().stream().collect(Collectors.toMap(Statewise::getState, Statewise::getActive));
+		surveyMap = indiaRestClient.getIndianCases().getData().getStatewise().stream()
+				.collect(Collectors.toMap(Statewise::getState, Statewise::getActive));
 		modelAndVeiewForCountryGraphs.addObject("surveyMap", surveyMap);
 		return modelAndVeiewForCountryGraphs;
 	}
+
+	public void getCountryWiseCases(String name) {
+		allCases.stream().parallel().filter(s -> s.getCountry().equalsIgnoreCase(name)).forEach(cases -> {
+			countryWise = cases;
+			System.out.println(countryWise);
+		});
+	}
+
 }
