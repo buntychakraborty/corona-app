@@ -27,6 +27,8 @@ import io.corona.api.services.CoronaService;
 @RequestMapping(StringConstant.CORONA_API)
 public class CoronaTrackerController {
 
+	public static final String GRAPHS_INDIA_DISPLAY_BAR_GRAPH = "/graphs/india/displayBarGraph";
+
 	private static final Logger logger = LoggerFactory.getLogger(CoronaTrackerController.class);
 
 	@Autowired
@@ -89,7 +91,7 @@ public class CoronaTrackerController {
 		return modelAndVeiewForIndia;
 	}
 	
-	@GetMapping("/graphs/india/displayBarGraph")
+	@GetMapping(GRAPHS_INDIA_DISPLAY_BAR_GRAPH)
 	public ModelAndView barGraph(Model model) {
 		ModelAndView modelAndVeiewForCountryGraphs = new ModelAndView("barGraph");
 		Map<String, Integer> surveyMap = new LinkedHashMap<>();

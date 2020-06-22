@@ -12,7 +12,7 @@
 .table_outer { height: 45em; overflow: auto; }
 </style>
   <script type="text/javascript">
-  function callForCounry(url){
+  function callForCountry(url){
 	  window.location = "countries/"+url;
 
   }
@@ -65,7 +65,7 @@ setTimeout("window.open(self.location, '_self');", 300000);
     </thead>
     <tbody>
       <tr th:each="coronaCase: ${allCases}">
-        <td  th:text="${coronaCase.getCountry()}"  style="cursor: pointer" 
+        <td  th:text="${coronaCase.getCountry()}"  style="cursor: pointer" th:onclick="callForCountry('${coronaCase.getCountry()}');"
         ><a th:hreaf="@{/countries/usa}"></a></td>
         <td th:text="${coronaCase.getCases()}"></td>
         <td th:text="${coronaCase.getRecovered()}"></td>
