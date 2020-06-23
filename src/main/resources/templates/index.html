@@ -50,8 +50,8 @@
 			<option value="#">All</option>
 			<option value="/corona-api/graphs/india/displayBarGraph">Bar
 				Graph For India</option>
-			<!-- <option value="/corona-api/graphs/india/pieChart">Pie Chart
-				For India</option> -->
+			<option value="/corona-api/graphs/india/lineGraph">Line
+				Graph For India</option>
 
 		</select>
 		&nbsp;
@@ -61,8 +61,7 @@
 			<option value="#">All</option>
 			<option value="/corona-api/countries/india/statewise">
 				Indian States</option>
-			<!-- <option value="/corona-api/graphs/india/pieChart">Pie Chart
-				For India</option> -->
+			
 
 		</select>
 		<div class="table_outer">
@@ -83,7 +82,7 @@
 					<tr th:each="coronaCase: ${allCases}">
 						<td><a
 							th:href="@{'/corona-api/countries/' + ${coronaCase.country}}"><span
-								th:text="${coronaCase.getCountry()}"> </span></a></td>
+								th:text="${coronaCase.getCountry()}" > </span></a></td>
 						<td th:text="${coronaCase.getCases()}"></td>
 						<td th:text="${coronaCase.getRecovered()}"></td>
 						<td th:text="${coronaCase.getDeaths()}"></td>

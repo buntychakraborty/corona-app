@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div class="container">
-		<h2 align="center">Active Cases Line Graph</h2>
+		<h2 align="center">Corona Cases Line Graph</h2>
 
 		<div id="container"
 			style="width: 1150px; height: 600px; margin: 0 auto"></div>
@@ -31,10 +31,10 @@
             type: 'column'
         },
         title: {
-            text: 'Active Cases In India'
+            text: 'Corona Cases In India'
         },
         subtitle: {
-            text: 'It shows the total number of active case in India'
+            text: 'It shows the total number of corona cases in India'
         },
         xAxis: {
             categories: [[${surveyMap.keySet()}]],
@@ -42,9 +42,9 @@
         },
         yAxis: {
             min: 0,
-            max:100,
+            
             title: {
-                text: 'Active cases [in %]'
+                text: 'Corona cases [in %]'
             }
         },
         tooltip: {
@@ -58,13 +58,26 @@
         plotOptions: {
             column: {
                 pointPadding: 0.2,
-                borderWidth: 1
+                borderWidth: 0
             }
         },
-        series: [{
-            name: 'Active Cases',
-            data: [[${surveyMap.values()}]]
-        }]
+  	  series: [{
+          name: 'Active Cases',
+          data: [[${surveyMap.values()}]]
+          
+	  
+      }
+	  ,
+    {
+    name: 'Confirmed Cases',
+      data: [[${surveyMap2.values()}]] 
+    },  {
+    name: 'Recovered Cases',
+      data: [[${recoveredCaseMap.values()}]] 
+    },{ name: 'Death Cases',
+  data: [[${deathCaseMap.values()}]] 
+  }
+	  ]
     });
     });
 </script>

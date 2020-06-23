@@ -13,33 +13,39 @@ import org.springframework.stereotype.Service;
 
 import io.corona.api.constants.StringConstant;
 import io.corona.api.model.Covid19B0;
+import io.corona.api.model.IndianStatesAndDistrictBO;
 import io.corona.api.model.Statewise;
 import io.corona.api.rest.clients.CoronaRestClient;
 import io.corona.api.rest.clients.IndiaCovidRestClient;
+import io.corona.api.rest.clients.IndianDistrictRestClient;
 
 @Service
 @EnableAsync
 public class CoronaService {
-	
-	
+
 	@Autowired
 	public CoronaRestClient client;
 	@Autowired
 	public IndiaCovidRestClient indiaRestClient;
+	@Autowired
+	public IndianDistrictRestClient indianDistrictRestClient;
 	public static List<Covid19B0> allCases = null;
 	public static List<Statewise> allIndianCases = null;
 	public static Covid19B0 countryWise = null;
 	public static String countryName = null;
-
-	
+	public static List<IndianStatesAndDistrictBO> listOfIndianDistricts =null;
+	public static IndianStatesAndDistrictBO indianStateWise = null;
 	@PostConstruct
 	@Async
 	@Scheduled(cron = StringConstant._1)
 	public void statfetchWorldCases() {
 		allCases = client.getWorldCases();
-		allIndianCases = indiaRestClient.getIndianCases().getData().getStatewise().stream()
+		allIndianCases = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
 				.sorted(Comparator.comparing(Statewise::getConfirmed).reversed()).collect(Collectors.toList());
+		
+		listOfIndianDistricts=indianDistrictRestClient.getListOfIndianDistricts();
 	}
+
 	/**
 	 * 
 	 * @param listOfCallCountries
@@ -91,14 +97,23 @@ public class CoronaService {
 		listOfCallCountries.stream().forEach(cases -> listOfPopulation.add(cases.getPopulation()));
 		return listOfPopulation.stream().reduce(Long::sum).get();
 	}
-	
+
 	public static void getCountryWiseCases(String name) {
 		allCases.stream().parallel().filter(s -> s.getCountry().equalsIgnoreCase(name)).forEach(cases -> {
 			countryWise = cases;
 			System.out.println(countryWise);
 		});
 	}
-	public static List<Covid19B0> getTopFiveCoronaAffectedCounties(){
-		return allCases.parallelStream().sorted(Comparator.comparing(Covid19B0::getCases).reversed()).limit(5).collect(Collectors.toList());
+
+	public static List<Covid19B0> getTopFiveCoronaAffectedCounties() {
+		return allCases.parallelStream().sorted(Comparator.comparing(Covid19B0::getCases).reversed()).limit(5)
+				.collect(Collectors.toList());
+	}
+	
+	public static void getIndianDistrictWiseWiseCases(String stateName) {
+		listOfIndianDistricts.stream().parallel().filter(s -> s.getState().equalsIgnoreCase(stateName)).forEach(cases -> {
+			indianStateWise = cases;
+			System.out.println(indianStateWise);
+		});
 	}
 }
