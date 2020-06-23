@@ -24,6 +24,7 @@ import io.corona.api.services.CoronaService;
 @RequestMapping(StringConstant.CORONA_API)
 public class CoronaTrackerController {
 
+	public static final String TOP_FIVE_COUNTRIES = "topFiveCountries";
 	private static final Logger logger = LoggerFactory.getLogger(CoronaTrackerController.class);
 	@Autowired
 	private CoronaService coronaService;
@@ -52,7 +53,7 @@ public class CoronaTrackerController {
 				coronaService.getTotalNumberOfPopulation(CoronaService.allCases));
 		modelAndVeiewForIndex.addObject(StringConstant.ALL_CASES, CoronaService.allCases.stream()
 				.sorted(Comparator.comparing(Covid19B0::getCases).reversed()).collect(Collectors.toList()));
-		modelAndVeiewForIndex.addObject("topFiveCountries",CoronaService.getTopFiveCoronaAffectedCounties());
+		modelAndVeiewForIndex.addObject(TOP_FIVE_COUNTRIES,CoronaService.getTopFiveCoronaAffectedCounties());
 		return modelAndVeiewForIndex;
 	}
 

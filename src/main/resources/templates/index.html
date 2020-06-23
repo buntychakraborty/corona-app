@@ -42,12 +42,25 @@
 				th:value="@{'/corona-api/countries/' + ${countr.country}}"
 				th:text="${countr.country}"></option>
 
-		</select> <label for="graph">Choose your Graph:</label> <select name="sample"
+		</select>  &nbsp; <label for="graph">Choose your Graph:</label> 
+		
+		<select name="sample"
 			onchange="location = this.value;"
 			class="browser-default custom-select">
 			<option value="#">All</option>
 			<option value="/corona-api/graphs/india/displayBarGraph">Bar
 				Graph For India</option>
+			<!-- <option value="/corona-api/graphs/india/pieChart">Pie Chart
+				For India</option> -->
+
+		</select>
+		&nbsp;
+		</select> <label for="graph">Indian States:</label> <select name="sample"
+			onchange="location = this.value;"
+			class="browser-default custom-select">
+			<option value="#">All</option>
+			<option value="/corona-api/countries/india/statewise">
+				Indian States</option>
 			<!-- <option value="/corona-api/graphs/india/pieChart">Pie Chart
 				For India</option> -->
 
