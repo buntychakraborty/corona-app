@@ -52,6 +52,7 @@ public class CoronaTrackerController {
 				coronaService.getTotalNumberOfPopulation(CoronaService.allCases));
 		modelAndVeiewForIndex.addObject(StringConstant.ALL_CASES, CoronaService.allCases.stream()
 				.sorted(Comparator.comparing(Covid19B0::getCases).reversed()).collect(Collectors.toList()));
+		modelAndVeiewForIndex.addObject("topFiveCountries",CoronaService.getTopFiveCoronaAffectedCounties());
 		return modelAndVeiewForIndex;
 	}
 

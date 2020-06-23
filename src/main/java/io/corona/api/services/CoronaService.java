@@ -98,4 +98,7 @@ public class CoronaService {
 			System.out.println(countryWise);
 		});
 	}
+	public static List<Covid19B0> getTopFiveCoronaAffectedCounties(){
+		return allCases.parallelStream().sorted(Comparator.comparing(Covid19B0::getCases).reversed()).limit(5).collect(Collectors.toList());
+	}
 }
