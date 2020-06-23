@@ -19,6 +19,7 @@ import io.corona.api.model.Statewise;
 import io.corona.api.rest.clients.CoronaRestClient;
 import io.corona.api.rest.clients.IndiaCovidRestClient;
 import io.corona.api.services.CoronaService;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping(StringConstant.CORONA_API)
@@ -34,6 +35,7 @@ public class CoronaTrackerController {
 	public IndiaCovidRestClient indiaRestClient;
 
 	@GetMapping(StringConstant.COUNTRIES)
+	@ApiOperation(value = "This consolidates statistics for all countries")
 	public ModelAndView getAllCases() {
 		ModelAndView modelAndVeiewForIndex = new ModelAndView(StringConstant.INDEX);
 		logger.info("-----");
@@ -58,6 +60,7 @@ public class CoronaTrackerController {
 	}
 
 	@GetMapping(StringConstant.COUNTRIES_COUNTRY)
+	@ApiOperation(value = "This consolidates statistics for a specific country")
 	public ModelAndView getCountryWise(@PathVariable String country) {
 		CoronaService.getCountryWiseCases(country);
 		ModelAndView modelAndVeiewForCountry = new ModelAndView(StringConstant.COUNTRY_WISE);
@@ -76,6 +79,7 @@ public class CoronaTrackerController {
 	}
 
 	@GetMapping(StringConstant.COUNTRIES_INDIA_STATEWISE)
+	@ApiOperation(value = "This consolidates statistics for India state-wise")
 	public ModelAndView getIndianCases() {
 		ModelAndView modelAndVeiewForIndia = new ModelAndView(StringConstant.INDIAN_STATE_WISE);
 		modelAndVeiewForIndia.addObject(StringConstant.INDIAN_STATES, CoronaService.allIndianCases);
@@ -83,6 +87,7 @@ public class CoronaTrackerController {
 	}
 
 	@GetMapping(StringConstant.GRAPHS_INDIA_DISPLAY_BAR_GRAPH)
+	@ApiOperation(value = "This consolidates statistics for India to display bar graph")
 	public ModelAndView barGraph(Model model) {
 		ModelAndView modelAndVeiewForCountryGraphs = new ModelAndView(StringConstant.BAR_GRAPH);
 		Map<String, Integer> surveyMap = new LinkedHashMap<>();
@@ -93,6 +98,7 @@ public class CoronaTrackerController {
 	}
 
 	@GetMapping(StringConstant.GRAPHS_INDIA_PIE_CHART)
+	@ApiOperation(value = "This consolidates statistics for India to display pie chart")
 	public ModelAndView pieChart(Model model) {
 		ModelAndView modelAndVeiewForCountryGraphs = new ModelAndView(StringConstant.PIE_CHART);
 		Map<String, Integer> surveyMap = new LinkedHashMap<>();
