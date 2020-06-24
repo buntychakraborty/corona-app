@@ -26,7 +26,60 @@
 </script>
 <script type="text/javascript">
 	function load() {
+		$('a').click(function(event) {
+	    	event.preventDefault();
+	    });
 		setTimeout("window.open(self.location, '_self');", 300000);
+		document.getElementById("content").style.display = "none";
+		document.getElementById("primary_content").style.display = "block";
+		document.getElementById("subTitle").innerHTML = "Table showing the world wide cases of Covid-19 Country wise";
+	}
+	function showContent(selectObject) {
+		var value = selectObject.value;
+		if (value.includes("india/statewise")) {
+			document.getElementById("subTitle").innerHTML = "Table showing the total cases of Covid-19 in Indian States";
+			document.getElementById("content").style.display = "block";
+			document.getElementById("content").innerHTML = '<object type="text/html" data="'+value+'" style="width: 1062px;height: 560px;"></object>';
+			document.getElementById("primary_content").style.display = "none";
+		} else if (value === "#") {
+			load();
+		} else if (value.includes("displayBarGraph")) {
+			document.getElementById("subTitle").innerHTML = "Corona Cases Bar Graph for India";
+			document.getElementById("content").style.display = "block";
+			document.getElementById("content").innerHTML = '<object type="text/html" data="'+value+'" style="width: 1250px;height: 560px;"></object>';
+			document.getElementById("primary_content").style.display = "none";
+		} else if (value.includes("lineGraph")) {
+			document.getElementById("subTitle").innerHTML = "Corona Cases Line Graph for India";
+			document.getElementById("content").style.display = "block";
+			document.getElementById("content").innerHTML = '<object type="text/html" data="'+value+'" style="width: 1250px;height: 560px;"></object>';
+			document.getElementById("primary_content").style.display = "none";
+		}
+	}
+	function showContentCountryWise(selectObject, country) {
+		var url = selectObject.value;
+		var value = selectObject.value.split(/[\s/]+/);
+		if (value.includes("countries")) {
+			document.getElementById("subTitle").innerHTML = "Table showing the total cases of Covid-19 in "
+					+ value[3];
+			document.getElementById("content").style.display = "block";
+			document.getElementById("content").innerHTML = '<object type="text/html" data="'+url+'" style="width: 1062px;height: 560px;"></object>';
+			document.getElementById("primary_content").style.display = "none";
+		} else {
+			load();
+		}
+	}
+	function showContentCountry(selectObject) {
+		var url = selectObject;
+		var value = selectObject.split(/[\s/]+/);
+		if (value.includes("countries")) {
+			document.getElementById("subTitle").innerHTML = "Table showing the total cases of Covid-19 in "
+					+ value[4];
+			document.getElementById("content").style.display = "block";
+			document.getElementById("content").innerHTML = '<object type="text/html" data="'+url+'" style="width: 1062px;height: 560px;"></object>';
+			document.getElementById("primary_content").style.display = "none";
+		} else {
+			load();
+		}
 	}
 </script>
 </head>
@@ -34,18 +87,18 @@
 
 	<div class="container">
 		<h2>COVID-19 Statistics</h2>
-		<p>Table showing the world wide cases of Covid-19 Country wise</p>
-		<label for="sel">Top Five Corona Affected Countries</label> <select name="sample"
-			onchange="location = this.value;"
+		<p id="subTitle">Table showing the world wide cases of Covid-19
+			Country wise</p>
+		<label for="sel">Top Five Corona Affected Countries</label> <select
+			name="sample" onchange="showContentCountryWise(this);"
 			class="browser-default custom-select">
+			<option value="#">All</option>
 			<option th:each="countr : ${topFiveCountries}"
 				th:value="@{'/corona-api/countries/' + ${countr.country}}"
 				th:text="${countr.country}"></option>
 
-		</select>  &nbsp; <label for="graph">Choose your Graph:</label> 
-		
-		<select name="sample"
-			onchange="location = this.value;"
+		</select> &nbsp; <label for="graph">Choose your Graph:</label> <select
+			name="sample" onchange="showContent(this);"
 			class="browser-default custom-select">
 			<option value="#">All</option>
 			<option value="/corona-api/graphs/india/displayBarGraph">Bar
@@ -53,18 +106,17 @@
 			<option value="/corona-api/graphs/india/lineGraph">Line
 				Graph For India</option>
 
-		</select>
-		&nbsp;
-		</select> <label for="graph">Indian States:</label> <select name="sample"
-			onchange="location = this.value;"
+		</select> &nbsp; </select> <label for="graph">Indian States:</label> <select
+			name="sample" onchange="showContent(this);"
 			class="browser-default custom-select">
 			<option value="#">All</option>
 			<option value="/corona-api/countries/india/statewise">
 				Indian States</option>
-			
+
 
 		</select>
-		<div class="table_outer">
+		<div id="content" style="width: 400px"></div>
+		<div id="primary_content" class="table_outer">
 			<table class="content-table">
 				<thead>
 					<tr>
@@ -81,9 +133,10 @@
 				<tbody>
 					<tr th:each="coronaCase: ${allCases}">
 						<td><a
-							th:href="@{'/corona-api/countries/' + ${coronaCase.country}}"><span
-								th:text="${coronaCase.getCountry()}" > </span></a></td>
-						<td th:text="${#numbers.formatInteger(coronaCase.getCases(),3)}"></td>
+							th:href="@{'/corona-api/countries/' + ${coronaCase.country}}"
+							onclick="showContentCountry(this.href);"><span
+								th:text="${coronaCase.getCountry()}"> </span></a></td>
+						<td th:text="${coronaCase.getCases()}"></td>
 						<td th:text="${coronaCase.getRecovered()}"></td>
 						<td th:text="${coronaCase.getDeaths()}"></td>
 						<td th:text="${coronaCase.getTodayCases()}"></td>
@@ -100,9 +153,7 @@
 						<td th:text="${totalTodaysRecovery}"></td>
 						<td th:text="${totalTodaysDeath}"></td>
 						<td th:text="${totalPopulation}"></td>
-
 					</tr>
-
 				</tbody>
 			</table>
 		</div>
