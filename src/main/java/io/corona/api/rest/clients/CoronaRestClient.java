@@ -12,6 +12,6 @@ import io.corona.api.model.Covid19B0;
 public interface CoronaRestClient {
 	@GetMapping("/countries")
 	public List<Covid19B0> getWorldCases();
-	@GetMapping("countries/{country}")
+	@GetMapping("/countries/{country}")
 	public Covid19B0 getCountryWiseCases(@PathVariable String country);
 }

@@ -25,4 +25,10 @@ public class StringConstant {
 	public static final String GRAPHS_INDIA_PIE_CHART = "/graphs/india/pieChart";
 	public static final String GRAPHS_INDIA_DISPLAY_BAR_GRAPH = "/graphs/india/displayBarGraph";
 	public static final String _1 = "1 * * * * *";
+	public static final String THIS_CONSOLIDATES_STATISTICS_FOR_INDIA_TO_DISPLAY_PIE_CHART = "This consolidates statistics for India to display pie chart";
+	public static final String THIS_CONSOLIDATES_STATISTICS_FOR_INDIA_TO_DISPLAY_BAR_GRAPH = "This consolidates statistics for India to display bar graph";
+	public static final String THIS_CONSOLIDATES_STATISTICS_FOR_INDIA_STATE_WISE = "This consolidates statistics for India state-wise";
+	public static final String THIS_CONSOLIDATES_STATISTICS_FOR_A_SPECIFIC_COUNTRY = "This consolidates statistics for a specific country";
+	public static final String THIS_CONSOLIDATES_STATISTICS_FOR_ALL_COUNTRIES = "This consolidates statistics for all countries";
+	public static final String TOP_FIVE_COUNTRIES = "topFiveCountries";
 }

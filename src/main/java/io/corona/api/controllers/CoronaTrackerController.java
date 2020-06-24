@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
 import io.corona.api.constants.StringConstant;
 import io.corona.api.model.Covid19B0;
 import io.corona.api.model.Statewise;
@@ -32,9 +34,10 @@ public class CoronaTrackerController {
 	public CoronaRestClient client;
 	@Autowired
 	public IndiaCovidRestClient indiaRestClient;
+	
 
 	@GetMapping(StringConstant.COUNTRIES)
-	@ApiOperation(value = "This consolidates statistics for all countries")
+	@ApiOperation(value = StringConstant.THIS_CONSOLIDATES_STATISTICS_FOR_ALL_COUNTRIES)
 	public ModelAndView getAllCases() {
 		ModelAndView modelAndVeiewForIndex = new ModelAndView(StringConstant.INDEX);
 		logger.info("-----");
@@ -54,12 +57,13 @@ public class CoronaTrackerController {
 				coronaService.getTotalNumberOfPopulation(CoronaService.allCases));
 		modelAndVeiewForIndex.addObject(StringConstant.ALL_CASES, CoronaService.allCases.stream()
 				.sorted(Comparator.comparing(Covid19B0::getCases).reversed()).collect(Collectors.toList()));
-		modelAndVeiewForIndex.addObject("topFiveCountries",CoronaService.getTopFiveCoronaAffectedCounties());
+		modelAndVeiewForIndex.addObject(StringConstant.TOP_FIVE_COUNTRIES,
+				CoronaService.getTopFiveCoronaAffectedCounties());
 		return modelAndVeiewForIndex;
 	}
 
 	@GetMapping(StringConstant.COUNTRIES_COUNTRY)
-	@ApiOperation(value = "This consolidates statistics for a specific country")
+	@ApiOperation(value = StringConstant.THIS_CONSOLIDATES_STATISTICS_FOR_A_SPECIFIC_COUNTRY)
 	public ModelAndView getCountryWise(@PathVariable String country) {
 		CoronaService.getCountryWiseCases(country);
 		ModelAndView modelAndVeiewForCountry = new ModelAndView(StringConstant.COUNTRY_WISE);
@@ -78,32 +82,76 @@ public class CoronaTrackerController {
 	}
 
 	@GetMapping(StringConstant.COUNTRIES_INDIA_STATEWISE)
-	@ApiOperation(value = "This consolidates statistics for India state-wise")
+	@ApiOperation(value = StringConstant.THIS_CONSOLIDATES_STATISTICS_FOR_INDIA_STATE_WISE)
 	public ModelAndView getIndianCases() {
 		ModelAndView modelAndVeiewForIndia = new ModelAndView(StringConstant.INDIAN_STATE_WISE);
 		modelAndVeiewForIndia.addObject(StringConstant.INDIAN_STATES, CoronaService.allIndianCases);
 		return modelAndVeiewForIndia;
 	}
 
+	@GetMapping("/india/districts/{stateName}")
+	public ModelAndView getIndianDistrictWiseCases(@PathVariable String stateName) {
+		ModelAndView modelAndVeiewForIndianDistricts = new ModelAndView("indianDistrictWise");
+		CoronaService.getIndianDistrictWiseWiseCases(stateName);
+		modelAndVeiewForIndianDistricts.addObject("indianDistricts",CoronaService.indianStateWise.getDistrictData());
+		modelAndVeiewForIndianDistricts.addObject("stateName",stateName);
+		return modelAndVeiewForIndianDistricts;
+
+	}
+
 	@GetMapping(StringConstant.GRAPHS_INDIA_DISPLAY_BAR_GRAPH)
-	@ApiOperation(value = "This consolidates statistics for India to display bar graph")
 	public ModelAndView barGraph(Model model) {
 		ModelAndView modelAndVeiewForCountryGraphs = new ModelAndView(StringConstant.BAR_GRAPH);
 		Map<String, Integer> surveyMap = new LinkedHashMap<>();
-		surveyMap = indiaRestClient.getIndianCases().getData().getStatewise().stream()
+		Map<String, Integer> surveyMap2 = new LinkedHashMap<>();
+		Map<String, Integer> surveyMap3 = new LinkedHashMap<>();
+		Map<String, Integer> surveyMap4 = new LinkedHashMap<>();
+		
+		surveyMap = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
 				.collect(Collectors.toMap(Statewise::getState, Statewise::getActive));
+		
+		surveyMap2 = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
+				.collect(Collectors.toMap(Statewise::getState, Statewise::getConfirmed));
+		
+		surveyMap3 = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
+				.collect(Collectors.toMap(Statewise::getState, Statewise::getRecovered));
+		
+		surveyMap4 = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
+				.collect(Collectors.toMap(Statewise::getState, Statewise::getDeaths));
+		
+		
 		modelAndVeiewForCountryGraphs.addObject(StringConstant.SURVEY_MAP, surveyMap);
+		modelAndVeiewForCountryGraphs.addObject("surveyMap2", surveyMap2);
+		modelAndVeiewForCountryGraphs.addObject("recoveredCaseMap", surveyMap3);
+		modelAndVeiewForCountryGraphs.addObject("deathCaseMap", surveyMap4);
 		return modelAndVeiewForCountryGraphs;
 	}
-
-	@GetMapping(StringConstant.GRAPHS_INDIA_PIE_CHART)
-	@ApiOperation(value = "This consolidates statistics for India to display pie chart")
-	public ModelAndView pieChart(Model model) {
-		ModelAndView modelAndVeiewForCountryGraphs = new ModelAndView(StringConstant.PIE_CHART);
+	
+	@GetMapping("/graphs/india/lineGraph")
+	public ModelAndView lineChart(Model model) {
+		ModelAndView modelAndVeiewForCountryGraphs = new ModelAndView("lineGraph");
 		Map<String, Integer> surveyMap = new LinkedHashMap<>();
-		surveyMap = indiaRestClient.getIndianCases().getData().getStatewise().stream()
+		Map<String, Integer> surveyMap2 = new LinkedHashMap<>();
+		Map<String, Integer> surveyMap3 = new LinkedHashMap<>();
+		Map<String, Integer> surveyMap4 = new LinkedHashMap<>();
+		
+		surveyMap = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
 				.collect(Collectors.toMap(Statewise::getState, Statewise::getActive));
+		
+		surveyMap2 = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
+				.collect(Collectors.toMap(Statewise::getState, Statewise::getConfirmed));
+		
+		surveyMap3 = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
+				.collect(Collectors.toMap(Statewise::getState, Statewise::getRecovered));
+		
+		surveyMap4 = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
+				.collect(Collectors.toMap(Statewise::getState, Statewise::getDeaths));
+		
+		
 		modelAndVeiewForCountryGraphs.addObject(StringConstant.SURVEY_MAP, surveyMap);
+		modelAndVeiewForCountryGraphs.addObject("surveyMap2", surveyMap2);
+		modelAndVeiewForCountryGraphs.addObject("recoveredCaseMap", surveyMap3);
+		modelAndVeiewForCountryGraphs.addObject("deathCaseMap", surveyMap4);
 		return modelAndVeiewForCountryGraphs;
 	}
 }

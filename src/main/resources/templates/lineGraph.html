@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Line Graph</title>
+<meta charset="ISO-8859-1" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
+
+</head>
+<body>
+	<div class="container">
+		<h2 align="center">Corona Cases : Line Graph</h2>
+
+		<div id="container"
+			style="width: 1150px; height: 600px; margin: 0 auto"></div>
+	</div>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<script th:inline="javascript">
+    $(function(){
+    	Highcharts.chart('container', {
+    		  chart: {
+    		    type: 'spline'
+    		  },
+    		  title: {
+    		    text: 'Corona Corona Cases'
+    		  },
+    		  
+    		  xAxis: {
+    			  categories: [[${surveyMap.keySet()}]]
+    		  },
+    		  yAxis: {
+    		    title: {
+    		      text: 'Corona Cases'
+    		    },
+    		    labels: {
+    		    }
+    		  },
+    		  tooltip: {
+    		    crosshairs: true,
+    		    shared: true
+    		  },
+    		  plotOptions: {
+    		    spline: {
+    		      marker: {
+    		        radius: 6,
+    		        lineColor: '#666666',
+    		        lineWidth: 1
+    		      }
+    		    }
+    		  },
+    		  series: [{
+    	            name: 'Active Cases',
+    	            data: [[${surveyMap.values()}]]
+    	            
+    		  
+    	        }
+    		  ,
+  	        {
+  	        name: 'Confirmed Cases',
+	            data: [[${surveyMap2.values()}]] 
+  	        },  {
+  	        name: 'Recovered Cases',
+	            data: [[${recoveredCaseMap.values()}]] 
+  	        },{ name: 'Death Cases',
+            data: [[${deathCaseMap.values()}]] 
+	        }
+    		  ]
+    		});
+    });
+</script>
+
+</body>
+</html>

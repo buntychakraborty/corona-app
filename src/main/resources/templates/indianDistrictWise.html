@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="https://www.thymeleaf.org/">
 <head>
-<title>Indian Statistics</title>
+<title th:text="${stateName}"></title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -17,29 +17,23 @@
 	<div class="container">
 		<h2>COVID-19 Statistics</h2>
 		<p>
-			Table showing the total cases of Covid-19 in Indian States</span>
+			Table showing the total cases of Covid-19 in Indian Districts of  </span> <span th:text="${stateName}"></span>
 		</p>
 		<table class="content-table">
 			<thead>
 				<tr>
-					<th>Indian States</th>
+					<th>District Name</th>
 					<th>Total Cases</th>
-					<th>Recovered</th>
-					<th>Active</th>
-					<th>Deaths</th>
+					<!-- <th>Recovered</th>
+					<th>Deaths</th> -->
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="state: ${indianStates}">
-					
-					
-					<td><a
-							th:href="@{'/corona-api/india/districts/' + ${state.state}}"><span
-								th:text="${state.state}"> </span></a></td>
-					<td th:text="${state.confirmed}" style="cursor: pointer"></td>
-					<td th:text="${state.recovered}"></td>
-					<td th:text="${state.active}"></td>
-					<td th:text="${state.deaths}"></td>
+				<tr th:each="district: ${indianDistricts}">
+					<td th:text="${district.name}"></td>
+					<td th:text="${district.confirmed}" style="cursor: pointer"></td>
+					<!-- <td th:text="${district.recovered}"></td>
+					<td th:text="${district.deaths}"></td> -->
 
 
 

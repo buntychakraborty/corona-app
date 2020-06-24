@@ -42,14 +42,26 @@
 				th:value="@{'/corona-api/countries/' + ${countr.country}}"
 				th:text="${countr.country}"></option>
 
-		</select> <label for="graph">Choose your Graph:</label> <select name="sample"
+		</select>  &nbsp; <label for="graph">Choose your Graph:</label> 
+		
+		<select name="sample"
 			onchange="location = this.value;"
 			class="browser-default custom-select">
 			<option value="#">All</option>
 			<option value="/corona-api/graphs/india/displayBarGraph">Bar
 				Graph For India</option>
-			<!-- <option value="/corona-api/graphs/india/pieChart">Pie Chart
-				For India</option> -->
+			<option value="/corona-api/graphs/india/lineGraph">Line
+				Graph For India</option>
+
+		</select>
+		&nbsp;
+		</select> <label for="graph">Indian States:</label> <select name="sample"
+			onchange="location = this.value;"
+			class="browser-default custom-select">
+			<option value="#">All</option>
+			<option value="/corona-api/countries/india/statewise">
+				Indian States</option>
+			
 
 		</select>
 		<div class="table_outer">
@@ -70,7 +82,7 @@
 					<tr th:each="coronaCase: ${allCases}">
 						<td><a
 							th:href="@{'/corona-api/countries/' + ${coronaCase.country}}"><span
-								th:text="${coronaCase.getCountry()}"> </span></a></td>
+								th:text="${coronaCase.getCountry()}" > </span></a></td>
 						<td th:text="${coronaCase.getCases()}"></td>
 						<td th:text="${coronaCase.getRecovered()}"></td>
 						<td th:text="${coronaCase.getDeaths()}"></td>
