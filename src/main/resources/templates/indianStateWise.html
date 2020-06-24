@@ -15,10 +15,6 @@
 <body>
 
 	<div class="container">
-		<h2>COVID-19 Statistics</h2>
-		<p>
-			Table showing the total cases of Covid-19 in Indian States</span>
-		</p>
 		<table class="content-table">
 			<thead>
 				<tr>
@@ -31,18 +27,13 @@
 			</thead>
 			<tbody>
 				<tr th:each="state: ${indianStates}">
-					
-					
 					<td><a
-							th:href="@{'/corona-api/india/districts/' + ${state.state}}"><span
-								th:text="${state.state}"> </span></a></td>
+						th:href="@{'/corona-api/india/districts/' + ${state.state}}"><span
+							th:text="${state.state}"> </span></a></td>
 					<td th:text="${state.confirmed}" style="cursor: pointer"></td>
 					<td th:text="${state.recovered}"></td>
 					<td th:text="${state.active}"></td>
 					<td th:text="${state.deaths}"></td>
-
-
-
 				</tr>
 
 			</tbody>

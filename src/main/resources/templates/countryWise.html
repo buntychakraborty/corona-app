@@ -1,65 +1,65 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="https://www.thymeleaf.org/">
 <head>
-  <title th:text="${countryName}">COVID-19 Statistics </title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-   <link rel="stylesheet" href="/table.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <script type="text/javascript">
-  function callForCounry(url){
-	  window.location = "countries/"+url;
+<title th:text="${countryName}">COVID-19 Statistics</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="/table.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	function callForCounry(url) {
+		window.location = "countries/" + url;
 
-  }
-  </script>
+	}
+</script>
 </head>
 <body>
 
-<div class="container">
-  <h2>COVID-19 Statistics</h2>
-  <p>Table showing the total cases of Covid-19 in <span th:text="${countryName}"></span></p>            
-  <table class="content-table">
-    <thead>
-      <tr>
-        <th>Country Name</th>
-        <th>Total Cases</th>
-        <th>Recovered</th>
-         <th>Deaths</th>
-        <th>Today's Cases</th>
-        <th>Today's Recovery</th>
-        <th>Today's Death</th>
-        <th>Total Population</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="countrywise: ${countryDTO}">
-        <td  th:text="${countrywise.getCountry()}"  style="cursor: pointer"
-        ></td>
-        <td th:text="${countrywise.getCases()}"></td>
-        <td th:text="${countrywise.getRecovered()}"></td>
-        <td th:text="${countrywise.getDeaths()}"></td>
-        <td th:text="${countrywise.getTodayCases()}"></td>
-         <td th:text="${countrywise.getTodayRecovered()}"></td>
-          <td th:text="${countrywise.getTodayDeaths()}"></td>
-           <td th:text="${countrywise.population}"></td>
-        
-      </tr>
-      <tr class="active-row">
-      <td >Total</td>
-       <td th:text="${totalCases}"></td>
-        <td th:text="${totalRecovery}"></td>
-        <td th:text="${totalDeaths}"></td>
-       <td th:text="${totalTodays}"></td>
-          <td th:text="${totalTodaysRecovery}"></td>
-           <td th:text="${totalTodaysDeath}"></td>
-            <td th:text="${totalPopulation}"></td>
-      
-      </tr>
-    </tbody>
-  </table>
-</div>
+	<div class="container">
+		<table class="content-table">
+			<thead>
+				<tr>
+					<th>Country Name</th>
+					<th>Total Cases</th>
+					<th>Recovered</th>
+					<th>Deaths</th>
+					<th>Today's Cases</th>
+					<th>Today's Recovery</th>
+					<th>Today's Death</th>
+					<th>Total Population</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="countrywise: ${countryDTO}">
+					<td th:text="${countrywise.getCountry()}" style="cursor: pointer"></td>
+					<td th:text="${countrywise.getCases()}"></td>
+					<td th:text="${countrywise.getRecovered()}"></td>
+					<td th:text="${countrywise.getDeaths()}"></td>
+					<td th:text="${countrywise.getTodayCases()}"></td>
+					<td th:text="${countrywise.getTodayRecovered()}"></td>
+					<td th:text="${countrywise.getTodayDeaths()}"></td>
+					<td th:text="${countrywise.population}"></td>
+
+				</tr>
+				<tr class="active-row">
+					<td>Total</td>
+					<td th:text="${totalCases}"></td>
+					<td th:text="${totalRecovery}"></td>
+					<td th:text="${totalDeaths}"></td>
+					<td th:text="${totalTodays}"></td>
+					<td th:text="${totalTodaysRecovery}"></td>
+					<td th:text="${totalTodaysDeath}"></td>
+					<td th:text="${totalPopulation}"></td>
+
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
 </body>
 </html>
