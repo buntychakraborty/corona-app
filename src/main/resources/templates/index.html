@@ -83,7 +83,7 @@
 						<td><a
 							th:href="@{'/corona-api/countries/' + ${coronaCase.country}}"><span
 								th:text="${coronaCase.getCountry()}" > </span></a></td>
-						<td th:text="${coronaCase.getCases()}"></td>
+						<td th:text="${#numbers.formatInteger(coronaCase.getCases(),3)}"></td>
 						<td th:text="${coronaCase.getRecovered()}"></td>
 						<td th:text="${coronaCase.getDeaths()}"></td>
 						<td th:text="${coronaCase.getTodayCases()}"></td>
