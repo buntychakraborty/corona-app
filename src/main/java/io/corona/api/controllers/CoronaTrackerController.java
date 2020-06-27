@@ -34,7 +34,6 @@ public class CoronaTrackerController {
 	public CoronaRestClient client;
 	@Autowired
 	public IndiaCovidRestClient indiaRestClient;
-	
 
 	@GetMapping(StringConstant.COUNTRIES)
 	@ApiOperation(value = StringConstant.THIS_CONSOLIDATES_STATISTICS_FOR_ALL_COUNTRIES)
@@ -89,12 +88,12 @@ public class CoronaTrackerController {
 		return modelAndVeiewForIndia;
 	}
 
-	@GetMapping("/india/districts/{stateName}")
+	@GetMapping(StringConstant.INDIA_DISTRICTS_STATE_NAME)
 	public ModelAndView getIndianDistrictWiseCases(@PathVariable String stateName) {
-		ModelAndView modelAndVeiewForIndianDistricts = new ModelAndView("indianDistrictWise");
+		ModelAndView modelAndVeiewForIndianDistricts = new ModelAndView(StringConstant.INDIAN_DISTRICT_WISE);
 		CoronaService.getIndianDistrictWiseWiseCases(stateName);
-		modelAndVeiewForIndianDistricts.addObject("indianDistricts",CoronaService.indianStateWise.getDistrictData());
-		modelAndVeiewForIndianDistricts.addObject("stateName",stateName);
+		modelAndVeiewForIndianDistricts.addObject(StringConstant.INDIAN_DISTRICTS, CoronaService.indianStateWise.getDistrictData());
+		modelAndVeiewForIndianDistricts.addObject(StringConstant.STATE_NAME, stateName);
 		return modelAndVeiewForIndianDistricts;
 
 	}
@@ -106,52 +105,50 @@ public class CoronaTrackerController {
 		Map<String, Integer> surveyMap2 = new LinkedHashMap<>();
 		Map<String, Integer> surveyMap3 = new LinkedHashMap<>();
 		Map<String, Integer> surveyMap4 = new LinkedHashMap<>();
-		
+
 		surveyMap = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
 				.collect(Collectors.toMap(Statewise::getState, Statewise::getActive));
-		
+
 		surveyMap2 = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
 				.collect(Collectors.toMap(Statewise::getState, Statewise::getConfirmed));
-		
+
 		surveyMap3 = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
 				.collect(Collectors.toMap(Statewise::getState, Statewise::getRecovered));
-		
+
 		surveyMap4 = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
 				.collect(Collectors.toMap(Statewise::getState, Statewise::getDeaths));
-		
-		
+
 		modelAndVeiewForCountryGraphs.addObject(StringConstant.SURVEY_MAP, surveyMap);
-		modelAndVeiewForCountryGraphs.addObject("surveyMap2", surveyMap2);
-		modelAndVeiewForCountryGraphs.addObject("recoveredCaseMap", surveyMap3);
-		modelAndVeiewForCountryGraphs.addObject("deathCaseMap", surveyMap4);
+		modelAndVeiewForCountryGraphs.addObject(StringConstant.SURVEY_MAP2, surveyMap2);
+		modelAndVeiewForCountryGraphs.addObject(StringConstant.RECOVERED_CASE_MAP, surveyMap3);
+		modelAndVeiewForCountryGraphs.addObject(StringConstant.DEATH_CASE_MAP, surveyMap4);
 		return modelAndVeiewForCountryGraphs;
 	}
-	
-	@GetMapping("/graphs/india/lineGraph")
+
+	@GetMapping(StringConstant.GRAPHS_INDIA_LINE_GRAPH)
 	public ModelAndView lineChart(Model model) {
-		ModelAndView modelAndVeiewForCountryGraphs = new ModelAndView("lineGraph");
+		ModelAndView modelAndViewForCountryGraphs = new ModelAndView(StringConstant.LINE_GRAPH);
 		Map<String, Integer> surveyMap = new LinkedHashMap<>();
 		Map<String, Integer> surveyMap2 = new LinkedHashMap<>();
 		Map<String, Integer> surveyMap3 = new LinkedHashMap<>();
 		Map<String, Integer> surveyMap4 = new LinkedHashMap<>();
-		
+
 		surveyMap = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
 				.collect(Collectors.toMap(Statewise::getState, Statewise::getActive));
-		
+
 		surveyMap2 = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
 				.collect(Collectors.toMap(Statewise::getState, Statewise::getConfirmed));
-		
+
 		surveyMap3 = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
 				.collect(Collectors.toMap(Statewise::getState, Statewise::getRecovered));
-		
+
 		surveyMap4 = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
 				.collect(Collectors.toMap(Statewise::getState, Statewise::getDeaths));
-		
-		
-		modelAndVeiewForCountryGraphs.addObject(StringConstant.SURVEY_MAP, surveyMap);
-		modelAndVeiewForCountryGraphs.addObject("surveyMap2", surveyMap2);
-		modelAndVeiewForCountryGraphs.addObject("recoveredCaseMap", surveyMap3);
-		modelAndVeiewForCountryGraphs.addObject("deathCaseMap", surveyMap4);
-		return modelAndVeiewForCountryGraphs;
+
+		modelAndViewForCountryGraphs.addObject(StringConstant.SURVEY_MAP, surveyMap);
+		modelAndViewForCountryGraphs.addObject(StringConstant.SURVEY_MAP2, surveyMap2);
+		modelAndViewForCountryGraphs.addObject(StringConstant.RECOVERED_CASE_MAP, surveyMap3);
+		modelAndViewForCountryGraphs.addObject(StringConstant.DEATH_CASE_MAP, surveyMap4);
+		return modelAndViewForCountryGraphs;
 	}
 }
