@@ -31,4 +31,13 @@ public class StringConstant {
 	public static final String THIS_CONSOLIDATES_STATISTICS_FOR_A_SPECIFIC_COUNTRY = "This consolidates statistics for a specific country";
 	public static final String THIS_CONSOLIDATES_STATISTICS_FOR_ALL_COUNTRIES = "This consolidates statistics for all countries";
 	public static final String TOP_FIVE_COUNTRIES = "topFiveCountries";
+	public static final String LINE_GRAPH = "lineGraph";
+	public static final String GRAPHS_INDIA_LINE_GRAPH = "/graphs/india/lineGraph";
+	public static final String DEATH_CASE_MAP = "deathCaseMap";
+	public static final String RECOVERED_CASE_MAP = "recoveredCaseMap";
+	public static final String SURVEY_MAP2 = "surveyMap2";
+	public static final String STATE_NAME = "stateName";
+	public static final String INDIAN_DISTRICTS = "indianDistricts";
+	public static final String INDIAN_DISTRICT_WISE = "indianDistrictWise";
+	public static final String INDIA_DISTRICTS_STATE_NAME = "/india/districts/{stateName}";
 }
