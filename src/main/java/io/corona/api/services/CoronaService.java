@@ -35,6 +35,7 @@ public class CoronaService {
 	public static String countryName = null;
 	public static List<IndianStatesAndDistrictBO> listOfIndianDistricts =null;
 	public static IndianStatesAndDistrictBO indianStateWise = null;
+	
 	@PostConstruct
 	@Async
 	@Scheduled(cron = StringConstant._1)
@@ -43,7 +44,7 @@ public class CoronaService {
 		allIndianCases = indiaRestClient.getIndianCases().getData().getStatewise().stream().parallel()
 				.sorted(Comparator.comparing(Statewise::getConfirmed).reversed()).collect(Collectors.toList());
 		
-		listOfIndianDistricts=indianDistrictRestClient.getListOfIndianDistricts();
+//		listOfIndianDistricts=indianDistrictRestClient.getListOfIndianDistricts();
 	}
 
 	/**
