@@ -101,6 +101,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>corona-app</finalName>
 	</build>
 
 </project>
