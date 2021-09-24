@@ -112,7 +112,7 @@ public class CoronaService {
 	}
 	
 	public static void getIndianDistrictWiseWiseCases(String stateName) {
-		listOfIndianDistricts.stream().parallel().takeWhile(s -> s.getState().equalsIgnoreCase(stateName)).forEach(cases -> {
+		listOfIndianDistricts.stream().parallel().filter(s -> s.getState().equalsIgnoreCase(stateName)).forEach(cases -> {
 			indianStateWise = cases;
 			System.out.println(indianStateWise);
 		});
