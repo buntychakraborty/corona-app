@@ -1,4 +1,4 @@
 FROM openjdk:8
-ADD target/weather-app.jar weather-app
+ADD target/corona-app.jar corona-app
 EXPOSE 8089
 ENTRYPOINT ["java","-jar","corona-app.jar"]
