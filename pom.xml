@@ -107,7 +107,8 @@
          </plugin>
          <plugin>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>sp
+            <artifactId>spring-boot-maven-plugin</artifactId>
+         </plugin>
 	
 		</plugins>
 		<finalName>corona-app</finalName>
